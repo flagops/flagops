@@ -1,0 +1,5 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "python.linting.cwd": "./src"
+}
