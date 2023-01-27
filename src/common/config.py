@@ -1,5 +1,7 @@
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import declarative_base, sessionmaker
 from functools import lru_cache
 from pydantic import BaseSettings
 
@@ -26,5 +28,13 @@ def get_db_url(asynchronous=False)->str:
     return f"postgresql+{driver}://{settings.pg_db_username}:{settings.pg_db_password}@{settings.pg_db_host}:{settings.pg_db_port}/{settings.pg_db_name}?{sslmode_key}={settings.pg_db_ssl}"
 
 engine = create_async_engine(get_db_url(asynchronous=True), future=True)
+async_sessionmaker = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
-BaseSQLModel = declarative_base()
+BaseModel = declarative_base()
+
+class BaseSQLModel(BaseModel):
+    tenant_id = Column(UUID(as_uuid=True), nullable=False)
+
+    __abstract__ = True
+
+# BaseSQLModel = declarative_base()

@@ -1,5 +1,13 @@
 import json
 from functools import lru_cache
+from .config import async_sessionmaker
+
+async def get_db_session():
+    db = async_sessionmaker()
+    try:
+        yield db
+    finally:
+        await db.close()
 
 @lru_cache()
 def get_buildinfo():
