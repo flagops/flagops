@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     pg_db_username: str
     pg_db_password: str
     pg_db_ssl: str
+    jwks_url: str
 
     class Config:
         env_file = ".env"
