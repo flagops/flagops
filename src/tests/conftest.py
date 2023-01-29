@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
 from ..api.main import app
-from ..common.config import get_settings
+from ..common.config import get_settings, JWT_DECODE_OPTIONS
 from ..common.config import BaseSQLModel
 from ..common.utils import get_db_session
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -48,6 +48,7 @@ def client():
 
     return TestClient(app)
 
+JWT_DECODE_OPTIONS["verify_exp"] = False
 
 # class TestJWTData:
 #     user_id = UUID("1e721695-e156-443c-8c2d-6cde7f7aebf6")

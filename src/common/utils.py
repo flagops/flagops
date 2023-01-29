@@ -4,7 +4,7 @@ import json
 import jwt
 from fastapi import Header, HTTPException, status
 from functools import lru_cache
-from .config import async_sessionmaker
+from .config import async_sessionmaker, JWT_DECODE_OPTIONS
 from .jwk_client import get_jwk_client
 
 async def get_db_session():
@@ -35,7 +35,7 @@ async def validate_token(authorization: str = Header(default=None))->UUID4:
         token = authorization.strip().split(" ")[1]
         key, algs = await jwk_client.get_key_and_algorithms(token)
         try:
-            payload = jwt.decode(token, key=key, algorithms=algs, options={"verify_exp": False, "verify_aud": False})
+            payload = jwt.decode(token, key=key, algorithms=algs, options=JWT_DECODE_OPTIONS)
             return UUID4(payload["tenantId"])
         except jwt.exceptions.InvalidTokenError as exc:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authorization token")

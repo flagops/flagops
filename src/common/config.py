@@ -39,3 +39,6 @@ class BaseSQLModel(BaseModel):
     __abstract__ = True
 
 # BaseSQLModel = declarative_base()
+
+
+JWT_DECODE_OPTIONS = {"verify_exp": True, "verify_aud": False}
